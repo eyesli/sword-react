@@ -30,15 +30,40 @@ class AddForm extends Component {
 
     return (
       <Form>
-        <Item label='角色名称' {...formItemLayout}>
+        <Item label='角色名字' {...formItemLayout}>
           {
-            getFieldDecorator('roleName', {
+            getFieldDecorator('name', {
               initialValue: '',
               rules: [
-                {required: true, message: '角色名称必须输入'}
+                {required: true, message: '角色名字必须输入'}
               ]
             })(
-              <Input placeholder='请输入角色名称'/>
+              <Input placeholder='请输入角色名字'/>
+            )
+          }
+        </Item>
+
+        <Item label='角色描述' {...formItemLayout}>
+          {
+            getFieldDecorator('desc', {
+              initialValue: '',
+              // rules: [
+              //   {required: true, message: '角色描述必须输入'}
+              // ]
+            })(
+              <Input placeholder='请输入角色描述'/>
+            )
+          }
+        </Item>
+        <Item label='所属部门' {...formItemLayout}>
+          {
+            getFieldDecorator('departmentId', {
+              initialValue: '',
+              // rules: [
+              //   {required: true, message: '角色描述必须输入'}
+              // ]
+            })(
+              <Input placeholder='所属部门'/>
             )
           }
         </Item>

@@ -39,7 +39,7 @@ const fs = require('fs')
 })*/
 
 // 通过mongoose连接数据库
-mongoose.connect('mongodb://116.62.109.203/server_db2', {useNewUrlParser: true})
+mongoose.connect('mongodb://127.0.0.1/server_db2', {useNewUrlParser: true})
   .then(() => {
     console.log('连接数据库成功!!!')
     // 只有当连接上数据库后才去启动服务器

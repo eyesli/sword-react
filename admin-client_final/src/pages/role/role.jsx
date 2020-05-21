@@ -4,10 +4,11 @@ import {
   Button,
   Table,
   Modal,
-  message
+  message,
+  Icon
 } from 'antd'
 import {PAGE_SIZE} from "../../utils/constants"
-import {reqRoles, reqAddRole, reqUpdateRole} from '../../api'
+import {getAllRoles, AddRole, reqUpdateRole} from '../../api'
 import AddForm from './add-form'
 import AuthForm from './auth-form'
 import memoryUtils from "../../utils/memoryUtils"
@@ -40,25 +41,22 @@ export default class Role extends Component {
       },
       {
         title: '创建时间',
-        dataIndex: 'create_time',
-        render: (create_time) => formateDate(create_time)
-      },
-      {
-        title: '授权时间',
-        dataIndex: 'auth_time',
-        render: formateDate
+        dataIndex: 'createTime',
+        render: (createTime) => formateDate(createTime)
       },
       {
         title: '授权人',
-        dataIndex: 'auth_name'
+        dataIndex: 'createBy'
       },
     ]
   }
 
   getRoles = async () => {
-    const result = await reqRoles()
-    if (result.status===0) {
+    const result = await getAllRoles()
+    if (result.code===200) {
+     
       const roles = result.data
+      console.log(roles);
       this.setState({
         roles
       })
@@ -92,13 +90,16 @@ export default class Role extends Component {
         })
 
         // 收集输入数据
-        const {roleName} = values
+        const role = this.form.getFieldsValue()
+       
         this.form.resetFields()
 
+     
+
         // 请求添加
-        const result = await reqAddRole(roleName)
+        const result = await AddRole(role)
         // 根据结果提示/更新列表显示
-        if (result.status===0) {
+        if (result.code===200) {
           message.success('添加角色成功')
           // this.getRoles()
           // 新产生的角色
@@ -174,24 +175,25 @@ export default class Role extends Component {
 
     const {roles, role, isShowAdd, isShowAuth} = this.state
 
-    const title = (
+    const extra = (
       <span>
-        <Button type='primary' onClick={() => this.setState({isShowAdd: true})}>创建角色</Button> &nbsp;&nbsp;
-        <Button type='primary' disabled={!role._id} onClick={() => this.setState({isShowAuth: true})}>设置角色权限</Button>
+         <Button type='primary' disabled={!role.id} onClick={() => this.setState({isShowAuth: true})}>设置角色权限</Button> &nbsp;&nbsp;
+         <Button type='primary' onClick={() => this.setState({isShowAdd: true})}> <Icon type='plus'/>创建角色</Button>
       </span>
     )
 
-    return (
-      <Card title={title}>
+   return (
+      <Card  extra={extra}>
         <Table
           bordered
-          rowKey='_id'
+          rowKey='id'
           dataSource={roles}
           columns={this.columns}
           pagination={{defaultPageSize: PAGE_SIZE}}
+          size='small'
           rowSelection={{
             type: 'radio',
-            selectedRowKeys: [role._id],
+            selectedRowKeys: [role.id],
             onSelect: (role) => { // 选择某个radio时回调
               this.setState({
                 role

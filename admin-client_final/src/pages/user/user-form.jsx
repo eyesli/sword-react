@@ -38,10 +38,19 @@ class UserForm extends PureComponent {
       <Form {...formItemLayout}>
         <Item label='用户名'>
           {
-            getFieldDecorator('username', {
-              initialValue: user.username,
+            getFieldDecorator('name', {
+              initialValue: user.name,
             })(
               <Input placeholder='请输入用户名'/>
+            )
+          }
+        </Item>
+        <Item label='外号'>
+          {
+            getFieldDecorator('nickName', {
+              initialValue: user.nickName,
+            })(
+              <Input placeholder='请输入外号'/>
             )
           }
         </Item>
@@ -62,8 +71,8 @@ class UserForm extends PureComponent {
 
         <Item label='手机号'>
           {
-            getFieldDecorator('phone', {
-              initialValue: user.phone,
+            getFieldDecorator('mobile', {
+              initialValue: user.mobile,
             })(
               <Input placeholder='请输入手机号'/>
             )
@@ -79,19 +88,19 @@ class UserForm extends PureComponent {
           }
         </Item>
 
-        <Item label='角色'>
+        { <Item label='角色'>
           {
             getFieldDecorator('role_id', {
-              initialValue: user.role_id,
+             // initialValue: user.role_id,
             })(
               <Select>
                 {
-                  roles.map(role => <Option key={role._id} value={role._id}>{role.name}</Option>)
+                  //roles.map(role => <Option key={role._id} value={role._id}>{role.name}</Option>)
                 }
               </Select>
             )
           }
-        </Item>
+        </Item> }
       </Form>
     )
   }

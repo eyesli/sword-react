@@ -9,7 +9,7 @@ import jsonp from 'jsonp'
 import {message} from 'antd'
 import request from './ajax'
 
-// const BASE = 'http://localhost:5000'
+// const BASE = 'http://localhost:5000' http://localhost:8001
 const BASE = ''
 // 登陆
 /*
@@ -65,19 +65,20 @@ export const reqAddOrUpdateProduct = (product) => request(BASE + '/manage/produc
 
 
 // 获取所有角色的列表
-export const reqRoles = () => request(BASE + '/manage/role/list')
+export const getAllRoles = () => request(BASE + '/role/findAllRole')
+
 // 添加角色
-export const reqAddRole = (roleName) => request(BASE + '/manage/role/add', {roleName}, 'POST')
+export const AddRole = (role) => request(BASE + '/role/create', role, 'POST')
 // 添加角色
 export const reqUpdateRole = (role) => request(BASE + '/manage/role/update', role, 'POST')
 
 
-// 获取所有用户的列表
-export const reqUsers = () => request(BASE + '/manage/user/list')
+// 获取所有用户的列表s
+export const findUserList = () => request(BASE + '/user/findUserList')
 // 删除指定用户
-export const reqDeleteUser = (userId) => request(BASE + '/manage/user/delete', {userId}, 'POST')
+export const reqDeleteUser = (id) => request(BASE + '/user/delete', {id}, 'GET')
 // 添加/更新用户
-export const reqAddOrUpdateUser = (user) => request(BASE + '/manage/user/'+(user._id ? 'update' : 'add'), user, 'POST')
+export const reqAddOrUpdateUser = (user) => request(BASE + '/user/'+(user.id ? 'update' : 'create'), user, 'POST')
 
 /*
 json请求的接口请求函数
