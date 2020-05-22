@@ -56,7 +56,7 @@ class UserForm extends PureComponent {
         </Item>
 
         {
-          user._id ? null : (
+          user.id ? null : (
             <Item label='密码'>
               {
                 getFieldDecorator('password', {

@@ -10,10 +10,11 @@ const Item = Form.Item
 /*
 添加分类的form组件
  */
-class AddForm extends Component {
+class UpdateForm extends Component {
 
   static propTypes = {
     setForm: PropTypes.func.isRequired, // 用来传递form对象的函数
+   
   }
 
   componentWillMount () {
@@ -22,6 +23,7 @@ class AddForm extends Component {
 
   render() {
     const { getFieldDecorator } = this.props.form
+   
     // 指定Item布局的配置对象
     const formItemLayout = {
       labelCol: { span: 4 },  // 左侧label的宽度
@@ -33,7 +35,7 @@ class AddForm extends Component {
         <Item label='角色名字' {...formItemLayout}>
           {
             getFieldDecorator('name', {
-              initialValue: '',
+             
               rules: [
                 {required: true, message: '角色名字必须输入'}
               ]
@@ -45,8 +47,8 @@ class AddForm extends Component {
 
         <Item label='角色描述' {...formItemLayout}>
           {
-            getFieldDecorator('desc', {
-              initialValue: '',
+            getFieldDecorator('description', {
+            
               // rules: [
               //   {required: true, message: '角色描述必须输入'}
               // ]
@@ -58,7 +60,7 @@ class AddForm extends Component {
         <Item label='所属部门' {...formItemLayout}>
           {
             getFieldDecorator('departmentId', {
-              initialValue: '',
+             
               // rules: [
               //   {required: true, message: '角色描述必须输入'}
               // ]
@@ -72,4 +74,4 @@ class AddForm extends Component {
   }
 }
 
-export default Form.create()(AddForm)
+export default Form.create()(UpdateForm)

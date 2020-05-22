@@ -9,13 +9,9 @@ import jsonp from 'jsonp'
 import {message} from 'antd'
 import request from './ajax'
 
-// const BASE = 'http://localhost:5000' http://localhost:8001
 const BASE = ''
 // 登陆
-/*
-export function reqLogin(username, password) {
-  return ajax('/login', {username, password}, 'POST')
-}*/
+
 export const reqLogin = (username, password) => request(BASE + '/login', {username, password}, 'POST')
 
 // 获取一级/二级分类的列表
@@ -66,12 +62,23 @@ export const reqAddOrUpdateProduct = (product) => request(BASE + '/manage/produc
 
 // 获取所有角色的列表
 export const getAllRoles = () => request(BASE + '/role/findAllRole')
+export const deleteRole = (id) => request(BASE + '/role/delete', {id}, 'GET')
 
-// 添加角色
-export const AddRole = (role) => request(BASE + '/role/create', role, 'POST')
-// 添加角色
-export const reqUpdateRole = (role) => request(BASE + '/manage/role/update', role, 'POST')
+export const addRole = (role) => request(BASE + '/role/create', role, 'POST')
+export const updateRole = (role) => request(BASE + '/role/update', role, 'POST')
 
+
+// 获取所有部门
+export const getDepartmentList = () => request(BASE + '/dept/findTree')
+//删除部门
+export const DeleteDepartment = (id) => request(BASE + '/dept/delete', {id}, 'GET')
+// 添加/更新部门
+export const AddOrUpdateDepartment = (department) =>(
+
+ request(BASE + '/dept/'+(department.id ? 'update' : 'create'), department, 'POST'))
+
+//通过ID查询部门信息
+export const getDepartment = (id) => request(BASE + '/dept/findDepartmentById',{id}, 'GET')
 
 // 获取所有用户的列表s
 export const findUserList = () => request(BASE + '/user/findUserList')

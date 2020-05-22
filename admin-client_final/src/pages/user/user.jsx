@@ -6,12 +6,14 @@ import {
   Modal,
   message,
   Badge,
-  Icon
+  Icon,
+  Tag
 } from 'antd'
 import {formateDate} from "../../utils/dateUtils"
 import LinkButton from "../../components/link-button/index"
 import {reqDeleteUser, findUserList, reqAddOrUpdateUser} from "../../api/index";
 import UserForm from './user-form'
+// import { Link } from 'dva/router';
 
 /*
 用户路由
@@ -29,17 +31,34 @@ export default class User extends Component {
       {
         title: '用户名',
         dataIndex: 'name',
-    
+       
+        render: (re,texts) => (
+          //这里有两个参数，第一个是当前的字段数据，第二个参数是这一行的数据，只写一个就是当前字段数据
+         
+          <Tag color="green">{re}</Tag>
+        ),
+
       },
       {
         title: '外号',
         dataIndex: 'nickName',
+        render: (re,texts) => (
+          //这里有两个参数，第一个是当前的字段数据，第二个参数是这一行的数据，只写一个就是当前字段数据
+         
+          <span>
+            <a style={{ marginRight: 16 }}> {texts.nickName}</a>
+          </span>
+        ),
        
       },
       {
         title: '邮箱',
         dataIndex: 'email',
-      
+        render: (re,texts) => (
+          //这里有两个参数，第一个是当前的字段数据，第二个参数是这一行的数据，只写一个就是当前字段数据
+         
+          <Tag color="green">{re}</Tag>
+        ),
       },
 
       {
@@ -52,11 +71,17 @@ export default class User extends Component {
         title: '注册时间',
         dataIndex: 'createTime',
         width: '9%',
+        
         render: formateDate
       },
       {
         title: '创建者',
         dataIndex: 'createBy',
+        render: (re,texts) => (
+          //这里有两个参数，第一个是当前的字段数据，第二个参数是这一行的数据，只写一个就是当前字段数据
+         
+          <Tag color="green">{re}</Tag>
+        ),
       },
       {
         title: '最近修改时间',
@@ -67,6 +92,11 @@ export default class User extends Component {
       {
         title: '最近修改人',
         dataIndex: 'lastUpdateBy',
+        render: (re,texts) => (
+          //这里有两个参数，第一个是当前的字段数据，第二个参数是这一行的数据，只写一个就是当前字段数据
+         
+          <Tag color="green">{re}</Tag>
+        ),
       },
       {
         title: '用户状态',
@@ -102,8 +132,8 @@ export default class User extends Component {
         //user随便取名字，没有 dataIndex user代表这行的对象
         render: (user) => (
           <span>
-            <LinkButton onClick={() => this.showUpdate(user)}>修改</LinkButton>
-            <LinkButton onClick={() => this.deleteUser(user)}>删除</LinkButton>
+             <Tag color="green"><LinkButton onClick={() => this.showUpdate(user)}>修改</LinkButton></Tag>
+             <Tag color="green"><LinkButton onClick={() => this.deleteUser(user)}>删除</LinkButton></Tag>
           </span>
         )
       },
@@ -211,8 +241,6 @@ export default class User extends Component {
 
     const {userlist, roles, isShow} = this.state
     const user = this.user || {}
-
-    const title = <Button type='primary' onClick={this.showAdd}>创建用户</Button>
 
     // Card的右侧
     const extra = (

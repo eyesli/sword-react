@@ -29,6 +29,11 @@ const menuList = [
     icon: 'user'
   },
   {
+    title: '部门管理',
+    key: '/department',
+    icon: 'tool'
+  },
+  {
     title: '角色管理',
     key: '/role',
     icon: 'safety',
