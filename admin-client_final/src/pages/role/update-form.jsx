@@ -29,7 +29,7 @@ class AddForm extends Component {
   render() {
     const { getFieldDecorator } = this.props.form
     const {role,department} = this.props
-   
+    const defalout= department?department.name:''
     // 指定Item布局的配置对象
     const formItemLayout = {
       labelCol: { span: 4 },  // 左侧label的宽度
@@ -65,8 +65,9 @@ class AddForm extends Component {
         </Item>
         <Item label='所属部门' {...formItemLayout}>
           {
+            
             getFieldDecorator('departmentId', {
-              initialValue: department.name,
+              initialValue: defalout,
               // rules: [
               //   {required: true, message: '角色描述必须输入'}
               // ]

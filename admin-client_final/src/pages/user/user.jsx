@@ -67,37 +67,37 @@ export default class User extends Component {
         defaultSortOrder: 'descend',
         sorter: (a, b) => a.mobile - b.mobile,
       },
-      {
-        title: '注册时间',
-        dataIndex: 'createTime',
-        width: '9%',
-        
-        render: formateDate
-      },
-      {
-        title: '创建者',
-        dataIndex: 'createBy',
-        render: (re,texts) => (
-          //这里有两个参数，第一个是当前的字段数据，第二个参数是这一行的数据，只写一个就是当前字段数据
-         
-          <Tag color="green">{re}</Tag>
-        ),
-      },
-      {
-        title: '最近修改时间',
-        dataIndex: 'lastUpdateTime',
-        width: '9%',
-        render: formateDate
-      },
-      {
-        title: '最近修改人',
-        dataIndex: 'lastUpdateBy',
-        render: (re,texts) => (
-          //这里有两个参数，第一个是当前的字段数据，第二个参数是这一行的数据，只写一个就是当前字段数据
-         
-          <Tag color="green">{re}</Tag>
-        ),
-      },
+      // {
+      //   title: '注册时间',
+      //   dataIndex: 'createTime',
+      //   width: '9%',
+      //
+      //   render: formateDate
+      // },
+      // {
+      //   title: '创建者',
+      //   dataIndex: 'createBy',
+      //   render: (re,texts) => (
+      //     //这里有两个参数，第一个是当前的字段数据，第二个参数是这一行的数据，只写一个就是当前字段数据
+      //
+      //     <Tag color="green">{re}</Tag>
+      //   ),
+      // },
+      // {
+      //   title: '最近修改时间',
+      //   dataIndex: 'lastUpdateTime',
+      //   width: '9%',
+      //   render: formateDate
+      // },
+      // {
+      //   title: '最近修改人',
+      //   dataIndex: 'lastUpdateBy',
+      //   render: (re,texts) => (
+      //     //这里有两个参数，第一个是当前的字段数据，第二个参数是这一行的数据，只写一个就是当前字段数据
+      //
+      //     <Tag color="green">{re}</Tag>
+      //   ),
+      // },
       {
         title: '用户状态',
         dataIndex: 'delFlag',
@@ -110,21 +110,11 @@ export default class User extends Component {
       },
       {
         title: '所属部门',
-        dataIndex: 'dept_id',
-        render:() => ( // 返回需要显示的界面标签
-          <span >
-           没写TODO
-          </span>
-          )
+        dataIndex: 'sysDept.name',
       },
       {
         title: '所属角色',
-        dataIndex: 'role_id',
-        render:(userdetail) => ( // 返回需要显示的界面标签
-          <span >
-            没写TODO
-          </span>
-          )
+        dataIndex: 'sysRole.name',
        // render: (role_id) => this.roleNames[role_id]
       },
       {
@@ -197,7 +187,7 @@ export default class User extends Component {
     // 1. 收集输入数据
     const user = this.form.getFieldsValue()
     this.form.resetFields()
-    // 如果是更新, 需要给user指定_id属性
+    // 如果是更新, 需要给user指定id属性
     if (this.user) {
       user.id = this.user.id
     }
@@ -205,7 +195,7 @@ export default class User extends Component {
     // 2. 提交添加的请求
     const result = await reqAddOrUpdateUser(user)
     // 3. 更新列表显示
-    if(result.status===0) {
+    if(result.code===200) {
       message.success(`${this.user ? '修改' : '添加'}用户成功`)
       this.getUsers()
     }

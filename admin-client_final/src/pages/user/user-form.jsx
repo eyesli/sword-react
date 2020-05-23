@@ -16,7 +16,7 @@ class UserForm extends PureComponent {
 
   static propTypes = {
     setForm: PropTypes.func.isRequired, // 用来传递form对象的函数
-    roles: PropTypes.array.isRequired,
+    //roles: PropTypes.array.isRequired,
     user: PropTypes.object
   }
 

@@ -5,7 +5,8 @@ import {
   Table,
   Modal,
   message,
-  Icon
+  Icon,
+  Tag 
 } from 'antd'
 import {PAGE_SIZE} from "../../utils/constants"
 import {getAllRoles, updateRole,addRole, deleteRole,getDepartment} from '../../api'
@@ -30,6 +31,8 @@ export default class Role extends Component {
     isShowAdd:false,
     isShowUpdate:false, 
     department:[],
+    departmentId:{}
+    
   }
 
   constructor (props) {
@@ -42,16 +45,33 @@ export default class Role extends Component {
     this.columns = [
       {
         title: '角色名称',
-        dataIndex: 'name'
+        dataIndex: 'name',
+        render: (re,texts) => (
+          //这里有两个参数，第一个是当前的字段数据，第二个参数是这一行的数据，只写一个就是当前字段数据
+         
+          <Tag color="green">{re}</Tag>
+        ),
       },
+
       {
-        title: '创建时间',
-        dataIndex: 'createTime',
-        render: (createTime) => formateDate(createTime)
+        title: '描述',
+        dataIndex: 'description',
+       
       },
       {
         title: '授权人',
         dataIndex: 'createBy'
+      },
+      {
+        title: '注册时间',
+        dataIndex: 'createTime',
+       // width: '9%',
+      
+        render: formateDate
+      },
+      {
+        title: '所属部门',
+        dataIndex: 'sysDept.name',
       },
       {
         title: '操作',
@@ -99,13 +119,15 @@ export default class Role extends Component {
         this.setState({isShowAdd: false })
         // 收集输入数据
         const role = this.form.getFieldsValue()
+        role.departmentId=this.state.departmentId
         const result = await addRole(role)
         // 根据结果提示/更新列表显示
       
         if (result.code===200) {
           message.success(`添加角色成功`)
           const role = result.data
-          this.setState(state => ({ roles: [...state.roles, role]}))
+          this.getRoles()
+         // this.setState(state => ({ roles: [...state.roles, role]}))
 
         } else {
           message.success('添加角色失败')
@@ -113,10 +135,15 @@ export default class Role extends Component {
 
       }
     })
-
+   
 
   }
 
+  getDepartmentId = (departmentId) => {
+    this.setState({
+      departmentId: departmentId,
+    });
+  }
   UpdateRole = () => {
     // 进行表单验证, 只能通过了才向下处理
     this.form.validateFields(async (error, values) => {
@@ -126,6 +153,7 @@ export default class Role extends Component {
         // 收集输入数据
         const role = this.form.getFieldsValue()
         role.id=this.role.id 
+        this.form.resetFields()
         const result = await updateRole(role)
        
         // 根据结果提示/更新列表显示
@@ -133,7 +161,6 @@ export default class Role extends Component {
         if (result.code===200) {
           message.success(`修改角色成功`)
           this.getRoles()
-
         } else {
           message.success('修改角色失败')
         }
@@ -261,6 +288,7 @@ export default class Role extends Component {
         >
           <AddForm
             setForm={(form) => this.form = form}
+            getDepartmentId={this.getDepartmentId}
           />
         </Modal>
 

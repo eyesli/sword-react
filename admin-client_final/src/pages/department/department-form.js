@@ -3,7 +3,9 @@ import PropTypes from 'prop-types'
 import {
   Form,
   Select,
-  Input
+  Input,
+  TreeSelect,
+  Divider 
 } from 'antd'
 
 const Item = Form.Item
@@ -19,14 +21,27 @@ class DepartmentForm  extends PureComponent{
     department: PropTypes.object
   }
 
+  state = {
+    value: undefined,
+  };
+
   componentWillMount () {
 
     this.props.setForm(this.props.form)
   }
 
+  onChange = value => {
+    const {  getSupDepartmentId } = this.props;
+    console.log(value);
+    getSupDepartmentId(value)
+    this.setState({ value });
+  };
   render() {
 
-    const {department} = this.props
+    const {department,departmentList} = this.props
+
+    
+    
     const { getFieldDecorator } = this.props.form
     // 指定Item布局的配置对象
     const formItemLayout = {
@@ -36,15 +51,33 @@ class DepartmentForm  extends PureComponent{
 
     return (
       <Form {...formItemLayout}>
-        <Item label='所属部门'>
-          {
-            getFieldDecorator('parentId', {
-              initialValue: department.parentId,
-            })(
-              <Input placeholder='所属部门'/>
-            )
-          }
-        </Item>
+        {
+          department.id ? 
+         (
+            <Item label='所属部门'>
+            {
+              getFieldDecorator('parentId', {
+                initialValue: department.parentName,
+              })
+            
+              
+              (
+                <Input disabled />
+              )
+            }
+          </Item>
+          ):<div><span>上级部门</span><TreeSelect
+          style={{ width: '62.5%' ,marginLeft:17}}
+          value={this.state.value}
+          dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+          treeData={departmentList}
+         // defaultValue='Please select'
+          placeholder="Please select"
+          treeDefaultExpandAll
+          onChange={this.onChange}
+        /></div>
+        }
+         <Divider dashed />
         <Item label='部门名称'>
           {
             getFieldDecorator('name', {

@@ -12,7 +12,7 @@ import request from './ajax'
 const BASE = ''
 // 登陆
 
-export const reqLogin = (username, password) => request(BASE + '/login', {username, password}, 'POST')
+export const reqLogin = (username, password) => request(BASE + '/user/login', {username, password}, 'POST')
 
 // 获取一级/二级分类的列表
 export const reqCategorys = (parentId) => request(BASE + '/manage/category/list', {parentId})

@@ -36,7 +36,7 @@ class Login extends Component {
         const {username, password} = values
         const result = await reqLogin(username, password) // {status: 0, data: user}  {status: 1, msg: 'xxx'}
         // console.log('请求成功', result)
-        if (result.status===0) { // 登陆成功
+        if (result.code===200) { // 登陆成功
           // 提示登陆成功
           message.success('登陆成功')
 

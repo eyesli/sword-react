@@ -92,9 +92,17 @@ export default class department extends Component {
     })
   }
 
+  getSupDepartmentId = (supDepartmentId) => {
+    this.setState({
+      supDepartmentId: supDepartmentId,
+    });
+  }
+
   /*
   添加/更新用户
    */
+
+   
   addOrUpdateDepartment = async () => {
 
     this.setState({isShow: false})
@@ -102,13 +110,15 @@ export default class department extends Component {
     // 1. 收集输入数据
     const Department = this.form.getFieldsValue()
 
+    Department.parentId=this.state.supDepartmentId
+    console.log(Department)
     this.form.resetFields()
     // 如果是更新, 需要给Department指定id属性
     if (this.department) {
       Department.id = this.department.id
     }
    
-    // 2. 提交添加的请求
+   // 2. 提交添加的请求
     const result = await AddOrUpdateDepartment(Department)
     // 3. 更新列表显示
     if(result.code===200) {
@@ -157,7 +167,9 @@ export default class department extends Component {
         >
           <DepartmentForm
               setForm={form => this.form = form}
+              departmentList={departmentList}
               department={department}
+              getSupDepartmentId={this.getSupDepartmentId}
           />
         </Modal>
         </Card>

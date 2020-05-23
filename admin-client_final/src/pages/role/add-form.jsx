@@ -2,9 +2,10 @@ import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import {
   Form,
-  Input
+  Input,
+  TreeSelect
 } from 'antd'
-
+import { getDepartmentList} from '../../api'
 const Item = Form.Item
 
 /*
@@ -12,18 +13,37 @@ const Item = Form.Item
  */
 class UpdateForm extends Component {
 
+  state = {
+    departmentList:[],
+    value: undefined, 
+    isShow: false, // 是否显示确认框
+  }
   static propTypes = {
     setForm: PropTypes.func.isRequired, // 用来传递form对象的函数
    
   }
+  onChange = value => {
+    const {  getDepartmentId} = this.props;
+    getDepartmentId(value)
+    this.setState({ value });
+  };
 
   componentWillMount () {
     this.props.setForm(this.props.form)
+    this.getDepartmentTree()
   }
-
+  getDepartmentTree = async () => {
+    const result = await getDepartmentList()
+    if (result.code===200) {
+      const departmentList = result.data
+      this.setState({
+        departmentList:departmentList
+      })
+    }
+  }
   render() {
     const { getFieldDecorator } = this.props.form
-   
+    const { departmentList} = this.state
     // 指定Item布局的配置对象
     const formItemLayout = {
       labelCol: { span: 4 },  // 左侧label的宽度
@@ -47,7 +67,7 @@ class UpdateForm extends Component {
 
         <Item label='角色描述' {...formItemLayout}>
           {
-            getFieldDecorator('description', {
+            getFieldDecorator('desc', {
             
               // rules: [
               //   {required: true, message: '角色描述必须输入'}
@@ -57,18 +77,16 @@ class UpdateForm extends Component {
             )
           }
         </Item>
-        <Item label='所属部门' {...formItemLayout}>
-          {
-            getFieldDecorator('departmentId', {
-             
-              // rules: [
-              //   {required: true, message: '角色描述必须输入'}
-              // ]
-            })(
-              <Input placeholder='所属部门'/>
-            )
-          }
-        </Item>
+        <div><span>所属部门</span><TreeSelect
+          style={{ width: '62.5%' ,marginLeft:17}}
+          value={this.state.value}
+          dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+          treeData={departmentList}
+         // defaultValue='Please select'
+          placeholder="Please select"
+          treeDefaultExpandAll
+          onChange={this.onChange}
+        /></div>
       </Form>
     )
   }
