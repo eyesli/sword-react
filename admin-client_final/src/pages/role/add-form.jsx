@@ -6,6 +6,7 @@ import {
   TreeSelect
 } from 'antd'
 import { getDepartmentList} from '../../api'
+import departmentTree from '../department/departmentTree'
 const Item = Form.Item
 
 /*

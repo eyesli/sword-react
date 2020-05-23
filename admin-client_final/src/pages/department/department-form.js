@@ -59,14 +59,13 @@ class DepartmentForm  extends PureComponent{
               getFieldDecorator('parentId', {
                 initialValue: department.parentName,
               })
-            
-              
               (
                 <Input disabled />
               )
             }
-          </Item>
-          ):<div><span>上级部门</span><TreeSelect
+          </Item>)
+          :
+          <div><span>上级部门</span><TreeSelect
           style={{ width: '62.5%' ,marginLeft:17}}
           value={this.state.value}
           dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}

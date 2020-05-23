@@ -7,12 +7,15 @@ import {
   message,
   Badge,
   Icon,
-  Tag
+  Tag,
+  Divider 
 } from 'antd'
 import {formateDate} from "../../utils/dateUtils"
 import LinkButton from "../../components/link-button/index"
-import {reqDeleteUser, findUserList, reqAddOrUpdateUser} from "../../api/index";
+import {reqDeleteUser, findUserList, reqAddOrUpdateUser,findRoleByDepartmentId} from "../../api/index";
 import UserForm from './user-form'
+import DepartmentTree from '../department/departmentTree'
+
 // import { Link } from 'dva/router';
 
 /*
@@ -24,6 +27,7 @@ export default class User extends Component {
     users: [], // 所有用户列表
     roles: [], // 所有角色列表
     isShow: false, // 是否显示确认框
+    departmentId:{}
   }
 
   initColumns = () => {
@@ -191,8 +195,9 @@ export default class User extends Component {
     if (this.user) {
       user.id = this.user.id
     }
-
-    // 2. 提交添加的请求
+    user.deptId=this.state.departmentId
+    console.log(user)
+    //2. 提交添加的请求
     const result = await reqAddOrUpdateUser(user)
     // 3. 更新列表显示
     if(result.code===200) {
@@ -205,17 +210,27 @@ export default class User extends Component {
     const result = await findUserList()
     
     if (result.code===200) {
-      const {users, roles} = result.data
       const userlist = result.data
-     // this.initRoleNames(roles)
       this.setState({
-        users,
-        roles,
         userlist
       })
     }
   }
+  getDepartmentId = async (departmentId) => {
+
+    const result = await findRoleByDepartmentId (departmentId)
  
+
+    if (result.code===200) {
+      const roles = result.data
+    
+      this.setState({
+        roles
+      })}
+    this.setState({
+      departmentId: departmentId,
+    });
+  }
 
 
   componentWillMount () {
@@ -261,12 +276,20 @@ export default class User extends Component {
             this.setState({isShow: false})
           }}
         >
+          
+          <DepartmentTree 
+           text='所属部门'
+           getDepartmentId={this.getDepartmentId}
+          />
+           <Divider dashed />
           <UserForm
           //todo 看不太懂
             setForm={form => this.form = form}
             roles={roles}
             user={user}
+          
           />
+         
         </Modal>
 
       </Card>

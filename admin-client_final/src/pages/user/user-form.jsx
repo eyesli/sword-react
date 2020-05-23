@@ -12,7 +12,7 @@ const Option = Select.Option
 /*
 添加/修改用户的form组件
  */
-class UserForm extends PureComponent {
+class UserForm extends React.Component{
 
   static propTypes = {
     setForm: PropTypes.func.isRequired, // 用来传递form对象的函数
@@ -22,11 +22,21 @@ class UserForm extends PureComponent {
 
   componentWillMount () {
     this.props.setForm(this.props.form)
+    const {roles, user} = this.props
+    this.setState({
+      roles,
+      user
+    })
+  }
+  shouldComponentUpdate() {
+   
+    console.log('shouldComponentUpdate');
+    return true
   }
 
   render() {
 
-    const {roles, user} = this.props
+     const {roles, user} = this.props
     const { getFieldDecorator } = this.props.form
     // 指定Item布局的配置对象
     const formItemLayout = {
@@ -87,15 +97,16 @@ class UserForm extends PureComponent {
             )
           }
         </Item>
+       
 
         { <Item label='角色'>
           {
-            getFieldDecorator('role_id', {
-             // initialValue: user.role_id,
+            getFieldDecorator('roleId', {
+            initialValue: '请选择',
             })(
-              <Select>
+              <Select allowClear notFoundContent>
                 {
-                  //roles.map(role => <Option key={role._id} value={role._id}>{role.name}</Option>)
+                  roles.map(role => <Option key={role.id} value={role.id}>{role.name}</Option>)
                 }
               </Select>
             )
