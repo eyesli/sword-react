@@ -63,12 +63,14 @@ export const reqAddOrUpdateProduct = (product) => request(BASE + '/manage/produc
 // 获取所有角色的列表
 export const getAllRoles = () => request(BASE + '/role/findAllRole')
 export const deleteRole = (id) => request(BASE + '/role/delete', {id}, 'GET')
+export const UpdateRoleAuth=(data)=>request(BASE + 'role/saveRoleMenus', data, 'POST')
 //根据部门查询角色信息
 export const findRoleByDepartmentId = (id) => request(BASE + 'role/findRoleByDepartmentId', {id}, 'GET')
 
 export const addRole = (role) => request(BASE + '/role/create', role, 'POST')
 export const updateRole = (role) => request(BASE + '/role/update', role, 'POST')
 
+export const getMenuTree =() => request(BASE + '/menu/findMenuTree')
 
 // 获取所有部门
 export const getDepartmentList = () => request(BASE + '/dept/findTree')

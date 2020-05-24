@@ -41,7 +41,7 @@ class Login extends Component {
           message.success('登陆成功')
 
           // 保存user
-          const user = result.data
+          const user = result.data.sysUser
           memoryUtils.user = user // 保存在内存中
           storageUtils.saveUser(user) // 保存到local中
 

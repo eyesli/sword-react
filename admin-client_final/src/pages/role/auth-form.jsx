@@ -24,10 +24,13 @@ export default class AuthForm extends PureComponent {
     super(props)
 
     // 根据传入角色的menus生成初始状态
-    const {menus} = this.props.role
+    const sysMenus = this.props.menus
+    const menuTree = this.props.menuTree
   
     this.state = {
-      checkedKeys: menus
+      checkedKeys:sysMenus,
+      menuTree:menuTree
+
     }
   }
 
@@ -37,8 +40,8 @@ export default class AuthForm extends PureComponent {
   getMenus = () => this.state.checkedKeys
 
 
-  getTreeNodes = (menuList) => {
-    return menuList.reduce((pre, item) => {
+  getTreeNodes = (menuTree) => {
+    return menuTree.reduce((pre, item) => {
       pre.push(
         <TreeNode title={item.title} key={item.key}>
           {item.children ? this.getTreeNodes(item.children) : null}
@@ -50,13 +53,16 @@ export default class AuthForm extends PureComponent {
 
   // 选中某个node时的回调
   onCheck = checkedKeys => {
-    console.log('onCheck', checkedKeys);
+   
     this.setState({ checkedKeys });
   };
 
 
   componentWillMount () {
-    this.treeNodes = this.getTreeNodes(menuList)
+   const menuTree = this.state.menuTree
+   
+    this.treeNodes = this.getTreeNodes(menuTree)
+ 
   }
 
   // 根据新传入的role来更新checkedKeys状态
@@ -64,8 +70,8 @@ export default class AuthForm extends PureComponent {
   当组件接收到新的属性时自动调用
    */
   componentWillReceiveProps (nextProps) {
-    console.log('componentWillReceiveProps()', nextProps)
-    const menus = nextProps.role.menus
+
+    const menus = nextProps.menus
     this.setState({
       checkedKeys: menus
     })
@@ -73,9 +79,10 @@ export default class AuthForm extends PureComponent {
   }
 
   render() {
-    console.log('AuthForm render()')
-    const {role} = this.props
-    const {checkedKeys} = this.state
+    const {role,menuTree} = this.props
+  
+    const checkedKeys=this.state.checkedKeys
+
     // 指定Item布局的配置对象
     const formItemLayout = {
       labelCol: { span: 4 },  // 左侧label的宽度
@@ -88,7 +95,7 @@ export default class AuthForm extends PureComponent {
           <Input value={role.name} disabled/>
         </Item>
 
-        <Tree
+        {/* <Tree
           checkable
           defaultExpandAll={true}
           checkedKeys={checkedKeys}
@@ -97,7 +104,17 @@ export default class AuthForm extends PureComponent {
           <TreeNode title="平台权限" key="all">
             {this.treeNodes}
           </TreeNode>
-        </Tree>
+        </Tree> */}
+
+
+        <Tree
+          checkable
+          defaultExpandAll={true}
+          checkedKeys={checkedKeys}
+          onCheck={this.onCheck}
+          treeData={menuTree}
+        >
+             </Tree>
       </div>
     )
   }

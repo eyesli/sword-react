@@ -9,7 +9,7 @@ import {
   Tag 
 } from 'antd'
 import {PAGE_SIZE} from "../../utils/constants"
-import {getAllRoles, updateRole,addRole, deleteRole,getDepartment} from '../../api'
+import {getAllRoles, updateRole,addRole, deleteRole,getDepartment,getMenuTree,UpdateRoleAuth} from '../../api'
 import AddForm from './add-form'
 import UpdateForm from './update-form'
 import AuthForm from './auth-form'
@@ -31,7 +31,10 @@ export default class Role extends Component {
     isShowAdd:false,
     isShowUpdate:false, 
     department:[],
-    departmentId:{}
+    departmentId:{},
+    menuTree:[],
+    data:{},
+    key:[]
     
   }
 
@@ -98,12 +101,28 @@ export default class Role extends Component {
 
   onRow = (role) => {
     return {
-      onClick: event => { // 点击行
-       // console.log('row onClick()', role)
-        // alert('点击行')
+      onClick: async  event => { // 点击行
+
         this.setState({
           role
+         
         })
+        // const role = this.state.role
+
+        let key
+        key = role.sysMenu.map((item, index) => {
+          key= item.id
+          return key
+       });
+    
+       
+        const result = await getMenuTree()
+        const menuTree= result.data
+        this.setState({
+          menuTree,
+          key
+        })
+        
       },
     }
   }
@@ -184,28 +203,29 @@ export default class Role extends Component {
     const role = this.state.role
     // 得到最新的menus
     const menus = this.auth.current.getMenus()
-    role.menus = menus
-    role.auth_time = Date.now()
-    role.auth_name = memoryUtils.user.username
 
-    // 请求更新
-    // const result = await reqUpdateRole(role)
-    // if (result.status===0) {
-    //   // this.getRoles()
-    //   // 如果当前更新的是自己角色的权限, 强制退出
-    //   if (role._id === memoryUtils.user.role_id) {
-    //     memoryUtils.user = {}
-    //     storageUtils.removeUser()
-    //     this.props.history.replace('/login')
-    //     message.success('当前用户角色权限成功')
-    //   } else {
-    //     message.success('设置角色权限成功')
-    //     this.setState({
-    //       roles: [...this.state.roles]
-    //     })
-    //   }
+    const data = this.state.data
 
-    // }
+    data.roleId=role.id
+    data.menuId=menus
+    
+    console.log( data)
+   // 请求更新
+    const result = await UpdateRoleAuth( data)
+    if (result.code===200) {
+      // this.getRoles()
+      // 如果当前更新的是自己角色的权限, 强制退出
+      if (role.id === memoryUtils.user.roleid) {
+        memoryUtils.user = {}
+        storageUtils.removeUser()
+        this.props.history.replace('/login')
+        message.success('当前用户角色权限成功')
+      } else {
+        message.success('设置角色权限成功')
+       this.getRoles()
+      }
+
+    }
   }
   deleteRole = (role) => {
     Modal.confirm({
@@ -235,6 +255,25 @@ export default class Role extends Component {
   showAdd = () => {
     this.setState({isShowAdd: true})
   }
+  showAuth = () => {
+    
+  //  const role = this.state.role
+
+  //   let key
+  //   key = role.sysMenu.map((item, index) => {
+  //     key= item.id
+  //     return key
+  //  });
+
+    this.setState({isShowAuth: true})
+    // const result = await getMenuTree()
+    // const menuTree= result.data
+    // this.setState({
+    //   menuTree,
+    //   key
+    // })
+  }
+
 
   componentWillMount () {
     this.initColumn()
@@ -246,11 +285,10 @@ export default class Role extends Component {
 
   render() {
 
-    const {roles, role, isShowAdd,isShowUpdate, isShowAuth,department} = this.state
-
+    const {roles, role, isShowAdd,isShowUpdate, isShowAuth,department,menuTree,key} = this.state
     const extra = (
       <span>
-         <Button type='primary' disabled={!role.id} onClick={() => this.setState({isShowAuth: true})}>设置角色权限</Button> &nbsp;&nbsp;
+         <Button type='primary' disabled={!role.id} onClick={this.showAuth}>设置角色权限</Button> &nbsp;&nbsp;
          <Button type='primary' onClick={this.showAdd}> <Icon type='plus'/>创建角色</Button>
       </span>
     )
@@ -319,7 +357,7 @@ export default class Role extends Component {
             this.setState({isShowAuth: false})
           }}
         >
-          <AuthForm ref={this.auth} role={role}/>
+          <AuthForm ref={this.auth} role={role} menus={key} menuTree={menuTree}/>
         </Modal>
       </Card>
     )

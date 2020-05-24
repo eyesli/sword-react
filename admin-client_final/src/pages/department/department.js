@@ -29,7 +29,8 @@ export default class department extends Component {
     this.columns = [
       {
         title: '部门列表',
-        dataIndex: 'name'
+        dataIndex: 'name',
+        render: text => <a>{text}</a>,
       },
       {
         title: '创建时间',
