@@ -41,7 +41,7 @@ class DepartmentTree extends PureComponent{
     const {departmentList} = this.state
     const { text} = this.props;
     return (
-
+   
     <div><span>{text}:</span>
 
             <TreeSelect
