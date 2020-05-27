@@ -14,6 +14,7 @@ import {formateDate} from "../../utils/dateUtils"
 import LinkButton from "../../components/link-button/index"
 import {reqDeleteUser, findUserList, reqAddOrUpdateUser,findRoleByDepartmentId} from "../../api/index";
 import UserForm from './user-form'
+import {WrappedAdvancedSearchForm} from './AdvancedSearchForm'
 import DepartmentTree from '../department/departmentTree'
 
 // import { Link } from 'dva/router';
@@ -248,12 +249,27 @@ export default class User extends Component {
 
     // Card的右侧
     const extra = (
-      <Button type='primary' onClick={this.showAdd}>
-        <Icon type='plus'/>
-        创建用户
-      </Button>
+      <div>
+         
+            <Button type='primary' onClick={this.showAdd}>
+              <Icon type='plus'/>
+              创建用户
+            </Button>
+      </div>
+    
     )
+
+
+
+    
     return (
+      <div>
+     
+     
+         <Card>
+           <WrappedAdvancedSearchForm />
+         </Card>
+      
       <Card  extra={extra}>
         <Table
           bordered
@@ -264,8 +280,6 @@ export default class User extends Component {
           size='small'
         />
 
- 
-
         <Modal
           title={user.id ? '修改用户' : '添加用户'}
           visible={isShow}
@@ -275,7 +289,6 @@ export default class User extends Component {
             this.setState({isShow: false})
           }}
         >
-          
           <DepartmentTree 
            text='所属部门'
            getDepartmentId={this.getDepartmentId}
@@ -292,6 +305,8 @@ export default class User extends Component {
         </Modal>
 
       </Card>
+      </div>
+    
     )
   }
 }

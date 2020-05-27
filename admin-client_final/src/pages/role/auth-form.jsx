@@ -26,7 +26,6 @@ export default class AuthForm extends PureComponent {
     // 根据传入角色的menus生成初始状态
     const sysMenus = this.props.menus
     const menuTree = this.props.menuTree
-  
     this.state = {
       checkedKeys:sysMenus,
       menuTree:menuTree

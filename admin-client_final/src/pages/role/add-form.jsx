@@ -24,7 +24,7 @@ class UpdateForm extends Component {
    
   }
   onChange = value => {
-    const {  getDepartmentId} = this.props;
+    const { getDepartmentId} = this.props;
     getDepartmentId(value)
     this.setState({ value });
   };
@@ -78,6 +78,28 @@ class UpdateForm extends Component {
             )
           }
         </Item>
+
+        {/* <Item label='in' {...formItemLayout}>
+          {
+            getFieldDecorator('descc', {
+            
+              // rules: [
+              //   {required: true, message: '角色描述必须输入'}
+              // ]
+            })(
+              <TreeSelect
+              style={{ width: '62.5%' ,marginLeft:17}}
+              value={this.state.value}
+              dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+              treeData={departmentList}
+             // defaultValue='Please select'
+              placeholder="Please select"
+              treeDefaultExpandAll
+              onChange={this.onChange}
+            />
+            )
+          }
+        </Item> */}
         <div><span>所属部门</span><TreeSelect
           style={{ width: '62.5%' ,marginLeft:17}}
           value={this.state.value}

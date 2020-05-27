@@ -93,8 +93,6 @@ class LeftNav extends Component {
     return menuList.reduce((pre, item) => {
 
       // 如果当前用户有item对应的权限, 才需要显示对应的菜单项
-      
-      console.log(item)
         // 向pre添加<Menu.Item>
         if(item.children.length===0&&item.type!="BUTTON"||item.children.length!=0&&item.type==="MENU") {
          
@@ -153,7 +151,6 @@ class LeftNav extends Component {
     // debugger
     // 得到当前请求的路由路径
     let path = this.props.location.pathname
-    // console.log('render()', path)
     if(path.indexOf('/product')===0) { // 当前请求的是商品或其子路由界面
       path = '/product'
     }

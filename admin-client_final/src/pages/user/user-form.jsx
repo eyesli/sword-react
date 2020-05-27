@@ -5,7 +5,7 @@ import {
   Select,
   Input
 } from 'antd'
-
+import DepartmentTree from '../department/departmentTree'
 const Item = Form.Item
 const Option = Select.Option
 
@@ -46,6 +46,20 @@ class UserForm extends React.Component{
 
     return (
       <Form {...formItemLayout}>
+
+      {/* <Item label='部门'>
+          {
+            getFieldDecorator('deptname', {
+              initialValue: user.name,
+            })(
+               <DepartmentTree 
+                  text='所属部门'
+                //  getDepartmentId={this.getDepartmentId}
+                  />
+              
+            )
+          }
+        </Item> */}
         <Item label='用户名'>
           {
             getFieldDecorator('name', {

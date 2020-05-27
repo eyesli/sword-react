@@ -64,7 +64,6 @@ class Header extends Component {
     Modal.confirm({
       content: '确定退出吗?',
       onOk: () => {
-        console.log('OK', this)
         // 删除保存的user数据
         storageUtils.removeUser()
         memoryUtils.user = {}

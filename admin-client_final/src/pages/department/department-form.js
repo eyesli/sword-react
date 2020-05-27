@@ -32,7 +32,6 @@ class DepartmentForm  extends PureComponent{
 
   onChange = value => {
     const {  getSupDepartmentId } = this.props;
-    console.log(value);
     getSupDepartmentId(value)
     this.setState({ value });
   };

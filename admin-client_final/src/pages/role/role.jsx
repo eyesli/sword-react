@@ -109,13 +109,15 @@ export default class Role extends Component {
         })
         // const role = this.state.role
 
+        console.log(role)
+
         let key
         key = role.sysMenu.map((item, index) => {
           key= item.id
           return key
        });
     
-       
+      
         const result = await getMenuTree()
         const menuTree= result.data
         this.setState({
@@ -311,7 +313,7 @@ export default class Role extends Component {
             }
 
           }}
-          onRow={this.onRow}
+          onRow={this.onRow} //选择某行发生回调
         />
 
         <Modal
