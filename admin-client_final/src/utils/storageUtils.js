@@ -3,6 +3,7 @@
  */
 import store from 'store'
 const USER_KEY = 'user_key'
+const MENU_KEY = 'menu_key'
 export default {
   /*
   保存user
@@ -26,5 +27,23 @@ export default {
   removeUser () {
     // localStorage.removeItem(USER_KEY)
     store.remove(USER_KEY)
+  },
+
+
+  saveMenus (menu) {
+    // localStorage.setItem(USER_KEY, JSON.stringify(user))
+    store.set(MENU_KEY, menu)
+  },
+
+ 
+  getMenu () {
+    // return JSON.parse(localStorage.getItem(USER_KEY) || '{}')
+    return store.get(MENU_KEY) || {}
+  },
+
+ 
+  removeMenu () {
+    // localStorage.removeItem(USER_KEY)
+    store.remove(MENU_KEY)
   }
 }

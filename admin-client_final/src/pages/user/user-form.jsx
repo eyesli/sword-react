@@ -12,21 +12,31 @@ const Option = Select.Option
 /*
 添加/修改用户的form组件
  */
-class UserForm extends PureComponent {
+class UserForm extends React.Component{
 
   static propTypes = {
     setForm: PropTypes.func.isRequired, // 用来传递form对象的函数
-    roles: PropTypes.array.isRequired,
+    //roles: PropTypes.array.isRequired,
     user: PropTypes.object
   }
 
   componentWillMount () {
     this.props.setForm(this.props.form)
+    const {roles, user} = this.props
+    this.setState({
+      roles,
+      user
+    })
+  }
+  shouldComponentUpdate() {
+   
+    console.log('shouldComponentUpdate');
+    return true
   }
 
   render() {
 
-    const {roles, user} = this.props
+     const {roles, user} = this.props
     const { getFieldDecorator } = this.props.form
     // 指定Item布局的配置对象
     const formItemLayout = {
@@ -38,16 +48,25 @@ class UserForm extends PureComponent {
       <Form {...formItemLayout}>
         <Item label='用户名'>
           {
-            getFieldDecorator('username', {
-              initialValue: user.username,
+            getFieldDecorator('name', {
+              initialValue: user.name,
             })(
               <Input placeholder='请输入用户名'/>
             )
           }
         </Item>
+        <Item label='外号'>
+          {
+            getFieldDecorator('nickName', {
+              initialValue: user.nickName,
+            })(
+              <Input placeholder='请输入外号'/>
+            )
+          }
+        </Item>
 
         {
-          user._id ? null : (
+          user.id ? null : (
             <Item label='密码'>
               {
                 getFieldDecorator('password', {
@@ -62,8 +81,8 @@ class UserForm extends PureComponent {
 
         <Item label='手机号'>
           {
-            getFieldDecorator('phone', {
-              initialValue: user.phone,
+            getFieldDecorator('mobile', {
+              initialValue: user.mobile,
             })(
               <Input placeholder='请输入手机号'/>
             )
@@ -78,20 +97,21 @@ class UserForm extends PureComponent {
             )
           }
         </Item>
+       
 
-        <Item label='角色'>
+        { <Item label='角色'>
           {
-            getFieldDecorator('role_id', {
-              initialValue: user.role_id,
+            getFieldDecorator('roleId', {
+            initialValue: '请选择',
             })(
-              <Select>
+              <Select allowClear notFoundContent>
                 {
-                  roles.map(role => <Option key={role._id} value={role._id}>{role.name}</Option>)
+                  roles.map(role => <Option key={role.id} value={role.id}>{role.name}</Option>)
                 }
               </Select>
             )
           }
-        </Item>
+        </Item> }
       </Form>
     )
   }

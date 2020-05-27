@@ -3,9 +3,8 @@ import {Link, withRouter} from 'react-router-dom'
 import {Menu, Icon} from 'antd';
 
 import logo from '../../assets/images/logo.png'
-import menuList from '../../config/menuConfig'
 import './index.less'
-import memoryUtils from "../../utils/memoryUtils";
+import storageUtils from "../../utils/storageUtils";
 
 const SubMenu = Menu.SubMenu;
 
@@ -14,26 +13,11 @@ const SubMenu = Menu.SubMenu;
  */
 class LeftNav extends Component {
 
-  /*
-  判断当前登陆用户对item是否有权限
-   */
-  hasAuth = (item) => {
-    const {key, isPublic} = item
 
-    const menus = memoryUtils.user.role.menus
-    const username = memoryUtils.user.username
-    /*
-    1. 如果当前用户是admin
-    2. 如果当前item是公开的
-    3. 当前用户有此item的权限: key有没有menus中
-     */
-    if(username==='admin' || isPublic || menus.indexOf(key)!==-1) {
-      return true
-    } else if(item.children){ // 4. 如果当前用户有此item的某个子item的权限
-      return !!item.children.find(child =>  menus.indexOf(child.key)!==-1)
-    }
-
-    return false
+  state = {
+  
+    menuNodes: {}, 
+    
   }
 
   /*
@@ -104,49 +88,51 @@ class LeftNav extends Component {
   */
   getMenuNodes = (menuList) => {
     // 得到当前请求的路由路径
+    
     const path = this.props.location.pathname
-
     return menuList.reduce((pre, item) => {
 
       // 如果当前用户有item对应的权限, 才需要显示对应的菜单项
-      if (this.hasAuth(item)) {
+      
+      console.log(item)
         // 向pre添加<Menu.Item>
-        if(!item.children) {
+        if(item.children.length===0&&item.type!="BUTTON"||item.children.length!=0&&item.type==="MENU") {
+         
           pre.push((
-            <Menu.Item key={item.key}>
-              <Link to={item.key}>
+            <Menu.Item key={item.url}>
+             <Link to={item.url}> 
                 <Icon type={item.icon}/>
-                <span>{item.title}</span>
-              </Link>
+                <span>{item.name}</span>
+               </Link> 
             </Menu.Item>
           ))
-        } else {
-
-          // 查找一个与当前请求路径匹配的子Item
-          const cItem = item.children.find(cItem => path.indexOf(cItem.key)===0)
+        } else  if(item.type!="BUTTON"){
+        
+         // 查找一个与当前请求路径匹配的子Item
+          const cItem = item.children.find(cItem => path.indexOf(cItem.url)===0)
           // 如果存在, 说明当前item的子列表需要打开
           if (cItem) {
-            this.openKey = item.key
+            this.openKey = item.url
           }
-
-
           // 向pre添加<SubMenu>
           pre.push((
             <SubMenu
-              key={item.key}
+              key={item.url}
               title={
                 <span>
-              <Icon type={item.icon}/>
-              <span>{item.title}</span>
-            </span>
+                    <Icon type={item.icon}/>
+                <span>{item.name}</span>
+                </span>
+              
+             
               }
             >
               {this.getMenuNodes(item.children)}
             </SubMenu>
           ))
         }
-      }
-
+      
+      
       return pre
     }, [])
   }
@@ -155,19 +141,22 @@ class LeftNav extends Component {
   在第一次render()之前执行一次
   为第一个render()准备数据(必须同步的)
    */
+ 
   componentWillMount () {
-    this.menuNodes = this.getMenuNodes(menuList)
+
+    const menus = storageUtils.getMenu()
+    this.menuNodes = this.getMenuNodes(menus )
+   
   }
 
   render() {
     // debugger
     // 得到当前请求的路由路径
     let path = this.props.location.pathname
-    console.log('render()', path)
+    // console.log('render()', path)
     if(path.indexOf('/product')===0) { // 当前请求的是商品或其子路由界面
       path = '/product'
     }
-
     // 得到需要打开菜单项的key
     const openKey = this.openKey
 
@@ -175,7 +164,7 @@ class LeftNav extends Component {
       <div className="left-nav">
         <Link to='/' className="left-nav-header">
           <img src={logo} alt="logo"/>
-          <h1>黑夜使者</h1>
+          <h1>权限管理</h1>
         </Link>
 
         <Menu
@@ -186,7 +175,7 @@ class LeftNav extends Component {
         >
 
           {
-            this.menuNodes
+          this.menuNodes
           }
 
         </Menu>

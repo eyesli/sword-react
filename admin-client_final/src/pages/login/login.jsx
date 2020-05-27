@@ -10,6 +10,7 @@ import {
 import './login.less'
 import logo from '../../assets/images/logo.png'
 import {reqLogin} from '../../api'
+import {getMenuTree,getMenuTreeByName} from '../../api'
 import memoryUtils from '../../utils/memoryUtils'
 import storageUtils from '../../utils/storageUtils'
 
@@ -36,15 +37,23 @@ class Login extends Component {
         const {username, password} = values
         const result = await reqLogin(username, password) // {status: 0, data: user}  {status: 1, msg: 'xxx'}
         // console.log('请求成功', result)
-        if (result.status===0) { // 登陆成功
+        if (result.code===200) { // 登陆成功
           // 提示登陆成功
           message.success('登陆成功')
-
+          const result2=  await getMenuTreeByName(username)
+          if(result2.code===200){
+            const menu = result2.data
+            memoryUtils.menus = menu // 保存在内存中
+            storageUtils.saveMenus(menu) // 保存到local中
+  
+          }
           // 保存user
-          const user = result.data
+          const user = result.data.sysUser
+         
           memoryUtils.user = user // 保存在内存中
           storageUtils.saveUser(user) // 保存到local中
 
+         
           // 跳转到管理界面 (不需要再回退回到登陆)
           this.props.history.replace('/')
 

@@ -9,14 +9,10 @@ import jsonp from 'jsonp'
 import {message} from 'antd'
 import request from './ajax'
 
-// const BASE = 'http://localhost:5000'
 const BASE = ''
 // 登陆
-/*
-export function reqLogin(username, password) {
-  return ajax('/login', {username, password}, 'POST')
-}*/
-export const reqLogin = (username, password) => request(BASE + '/login', {username, password}, 'POST')
+
+export const reqLogin = (username, password) => request(BASE + '/user/login', {username, password}, 'POST')
 
 // 获取一级/二级分类的列表
 export const reqCategorys = (parentId) => request(BASE + '/manage/category/list', {parentId})
@@ -65,19 +61,36 @@ export const reqAddOrUpdateProduct = (product) => request(BASE + '/manage/produc
 
 
 // 获取所有角色的列表
-export const reqRoles = () => request(BASE + '/manage/role/list')
-// 添加角色
-export const reqAddRole = (roleName) => request(BASE + '/manage/role/add', {roleName}, 'POST')
-// 添加角色
-export const reqUpdateRole = (role) => request(BASE + '/manage/role/update', role, 'POST')
+export const getAllRoles = () => request(BASE + '/role/findAllRole')
+export const deleteRole = (id) => request(BASE + '/role/delete', {id}, 'GET')
+export const UpdateRoleAuth=(data)=>request(BASE + 'role/saveRoleMenus', data, 'POST')
+//根据部门查询角色信息
+export const findRoleByDepartmentId = (id) => request(BASE + 'role/findRoleByDepartmentId', {id}, 'GET')
+
+export const addRole = (role) => request(BASE + '/role/create', role, 'POST')
+export const updateRole = (role) => request(BASE + '/role/update', role, 'POST')
+
+export const getMenuTree =() => request(BASE + '/menu/findMenuTree')
 
 
-// 获取所有用户的列表
-export const reqUsers = () => request(BASE + '/manage/user/list')
+export const getMenuTreeByName = (userName) => request(BASE + '/menu/findNavTree', {userName}, 'GET')
+
+// 获取所有部门
+export const getDepartmentList = () => request(BASE + '/dept/findTree')
+//删除部门
+export const DeleteDepartment = (id) => request(BASE + '/dept/delete', {id}, 'GET')
+// 添加/更新部门
+export const AddOrUpdateDepartment = (department) =>(request(BASE + '/dept/'+(department.id ? 'update' : 'create'), department, 'POST'))
+
+//通过ID查询部门信息
+export const getDepartment = (id) => request(BASE + '/dept/findDepartmentById',{id}, 'GET')
+
+// 获取所有用户的列表s
+export const findUserList = () => request(BASE + '/user/findUserList')
 // 删除指定用户
-export const reqDeleteUser = (userId) => request(BASE + '/manage/user/delete', {userId}, 'POST')
+export const reqDeleteUser = (id) => request(BASE + '/user/delete', {id}, 'GET')
 // 添加/更新用户
-export const reqAddOrUpdateUser = (user) => request(BASE + '/manage/user/'+(user._id ? 'update' : 'add'), user, 'POST')
+export const reqAddOrUpdateUser = (user) => request(BASE + '/user/'+(user.id ? 'update' : 'create'), user, 'POST')
 
 /*
 json请求的接口请求函数
