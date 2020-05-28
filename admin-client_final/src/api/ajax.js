@@ -12,18 +12,18 @@
 //  随便
 import axios from 'axios'
 import {message} from 'antd'
-
+import storageUtils from "../utils/storageUtils";
 export default function request(url, data={}, type='GET') {
 
   return new Promise((resolve, reject) => {
     let promise
     // 1. 执行异步ajax请求
     if(type==='GET') { // 发GET请求
-      promise = axios.get(url, { // 配置对象
+      promise = service.get(url, { // 配置对象
         params: data // 指定请求参数
       })
     } else { // 发POST请求
-      promise = axios.post(url, data)
+      promise = service.post(url, data)
     }
     // 2. 如果成功了, 调用resolve(value)
     promise.then(response => {
@@ -38,7 +38,24 @@ export default function request(url, data={}, type='GET') {
 
 }
 
-// 请求登陆接口
-// ajax('/login', {username: 'Tom', passsword: '12345'}, 'POST').then()
-// 添加用户
-// ajax('/manage/user/add', {username: 'Tom', passsword: '12345', phone: '13712341234'}, 'POST').then()
+const service = axios.create({
+ // baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
+  // withCredentials: true, // send cookies when cross-domain requests
+  timeout: 5000 // request timeout
+})
+
+// request interceptor
+service.interceptors.request.use(
+  config => {
+    if (storageUtils.getToekn()) {
+ 
+      config.headers['Authorization'] = storageUtils.getToekn()
+    }
+    return config
+  },
+  error => {
+    // do something with request error
+    console.log(error) // for debug
+    return Promise.reject(error)
+  }
+)

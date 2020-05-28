@@ -4,7 +4,25 @@
 import store from 'store'
 const USER_KEY = 'user_key'
 const MENU_KEY = 'menu_key'
+const TOKEN = 'token'
 export default {
+
+  saveToekn (token) {
+    // localStorage.setItem(USER_KEY, JSON.stringify(user))
+    store.set(TOKEN, token)
+  
+  },
+
+  getToekn () {
+   
+    return store.get(TOKEN) || null
+  },
+  removeToken () {
+    // localStorage.removeItem(USER_KEY)
+    store.remove(TOKEN)
+  },
+
+
   /*
   保存user
    */

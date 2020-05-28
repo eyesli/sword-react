@@ -82,6 +82,7 @@ export default class Role extends Component {
             <span>
             <LinkButton onClick={() => this.showUpdate(role)}>修改</LinkButton>
             <LinkButton onClick={() => this.deleteRole(role)}>删除</LinkButton>
+            <LinkButton onClick={this.showAuth}>查看权限</LinkButton>
           </span>
         )
       },
@@ -107,17 +108,12 @@ export default class Role extends Component {
           role
          
         })
-        // const role = this.state.role
-
-        console.log(role)
-
         let key
         key = role.sysMenu.map((item, index) => {
           key= item.id
           return key
        });
     
-      
         const result = await getMenuTree()
         const menuTree= result.data
         this.setState({
@@ -205,13 +201,10 @@ export default class Role extends Component {
     const role = this.state.role
     // 得到最新的menus
     const menus = this.auth.current.getMenus()
-
     const data = this.state.data
-
     data.roleId=role.id
     data.menuId=menus
     
-    console.log( data)
    // 请求更新
     const result = await UpdateRoleAuth( data)
     if (result.code===200) {

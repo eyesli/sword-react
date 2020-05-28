@@ -94,7 +94,7 @@ class LeftNav extends Component {
 
       // 如果当前用户有item对应的权限, 才需要显示对应的菜单项
         // 向pre添加<Menu.Item>
-        if(item.children.length===0&&item.type!="BUTTON"||item.children.length!=0&&item.type==="MENU") {
+        if(item.children.length===0&&item.type!="BUTTON"||item.children.length!==0&&item.type==="MENU") {
          
           pre.push((
             <Menu.Item key={item.url}>
@@ -104,7 +104,7 @@ class LeftNav extends Component {
                </Link> 
             </Menu.Item>
           ))
-        } else  if(item.type!="BUTTON"){
+        } else  if(item.type!=="BUTTON"){
         
          // 查找一个与当前请求路径匹配的子Item
           const cItem = item.children.find(cItem => path.indexOf(cItem.url)===0)

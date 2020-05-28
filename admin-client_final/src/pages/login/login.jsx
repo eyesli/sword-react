@@ -32,14 +32,22 @@ class Login extends Component {
     this.props.form.validateFields(async (err, values) => {
       // 检验成功
       if (!err) {
-        // console.log('提交登陆的ajax请求', values)
-        // 请求登陆
+
         const {username, password} = values
         const result = await reqLogin(username, password) // {status: 0, data: user}  {status: 1, msg: 'xxx'}
-        // console.log('请求成功', result)
+ 
         if (result.code===200) { // 登陆成功
           // 提示登陆成功
           message.success('登陆成功')
+            // 保存user
+            const user = result.data.sysUser
+            const token = result.data.token
+           
+           
+            memoryUtils.user = user // 保存在内存中
+            storageUtils.saveUser(user) // 保存到local中
+            memoryUtils.token=token
+            storageUtils.saveToekn(token)
           const result2=  await getMenuTreeByName(username)
           if(result2.code===200){
             const menu = result2.data
@@ -47,13 +55,7 @@ class Login extends Component {
             storageUtils.saveMenus(menu) // 保存到local中
   
           }
-          // 保存user
-          const user = result.data.sysUser
-         
-          memoryUtils.user = user // 保存在内存中
-          storageUtils.saveUser(user) // 保存到local中
-
-         
+        
           // 跳转到管理界面 (不需要再回退回到登陆)
           this.props.history.replace('/')
 
